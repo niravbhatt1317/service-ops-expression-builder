@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expression Builder · v4</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="version-switch">
+    <span class="version-label">Version</span>
+    <a href="index.html">v1</a>
+    <a href="v2.html">v2</a>
+    <a href="v3.html">v3</a>
+    <a href="v4.html" class="active">v4</a>
+    <a href="v5.html">v5</a>
+  </nav>
+
+  <div class="host">
+    <h1>Help center project brainstorm</h1>
+    <div class="host-table">
+      <div class="host-row head"><span>Name</span><span># Reach</span><span># Impact</span><span># Confidence</span><span># Effort</span></div>
+      <div class="host-row"><span>Create a new home page</span><span>2</span><span>2</span><span>3</span><span>2</span></div>
+      <div class="host-row"><span>Audit the entire help center</span><span>3</span><span>2</span><span>2</span><span>1</span></div>
+      <div class="host-row"><span>Create 3 new videos</span><span>1</span><span>3</span><span>2</span><span>3</span></div>
+    </div>
+    <button id="open-popover" class="primary-btn open-btn">Edit formula</button>
+  </div>
+
+  <div class="popover layout-wide" id="popover">
+    <header class="pop-header">
+      <div class="pop-title-row">
+        <div class="pop-title">
+          Expression Builder
+          <a class="pop-doc" href="#" target="_blank" rel="noopener noreferrer" title="Open documentation in new tab">
+            Docs
+            <svg class="pop-doc-icon" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M9 2h5v5" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M14 2 7 9" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+              <path d="M12 9.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3.5" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="formula-wrap">
+        <div id="formula" class="formula" tabindex="0">
+          <span class="placeholder">Hover an item on the left to preview · click to add it here</span>
+        </div>
+        <button id="clear-btn" class="formula-clear" hidden>Clear</button>
+      </div>
+    </header>
+
+    <!-- Builder + test panel always visible side-by-side -->
+    <div class="pop-body view-builder builder-with-test" id="view-builder">
+      <aside class="list-pane">
+        <div class="list-search">
+          <input id="search-input" type="text" placeholder="Search…" autocomplete="off" />
+        </div>
+        <div class="list-tabs" id="list-tabs">
+          <button class="list-tab active" data-tab="All">All</button>
+          <button class="list-tab" data-tab="Functions">Functions</button>
+          <button class="list-tab" data-tab="Operators">Operators</button>
+        </div>
+        <div class="list-body" id="list-body"></div>
+      </aside>
+      <section class="detail-pane" id="detail-pane">
+        <div class="detail-empty">Select an item on the left to see details and examples.</div>
+      </section>
+      <section class="test-panel" id="test-panel">
+        <button class="panel-toggle test-panel-toggle" id="test-panel-toggle" title="Collapse test panel">›</button>
+        <div class="test-panel-inner">
+          <div class="block-header">
+            <h4>Test</h4>
+            <button id="run-btn" class="primary-btn small">Run</button>
+          </div>
+          <h5 class="test-subheading">Reference values</h5>
+          <div id="refs-list"></div>
+          <h5 class="test-subheading">Result</h5>
+          <pre id="result-output" class="is-placeholder">Edit values above and click <strong>Run</strong>, or build to see the result here.</pre>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div id="ref-picker" class="ref-picker" hidden>
+    <div class="rp-header">
+      <button id="rp-back" class="rp-back" hidden>‹</button>
+      <span id="rp-breadcrumb" class="rp-breadcrumb">References</span>
+    </div>
+    <div class="rp-search">
+      <input id="rp-search" type="text" placeholder="Search attributes…" autocomplete="off" />
+    </div>
+    <div id="rp-list" class="rp-list"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

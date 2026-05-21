@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expression Builder · v2</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-version="v2">
+  <!-- version switcher -->
+  <nav class="version-switch">
+    <span class="version-label">Version</span>
+    <a href="index.html">v1</a>
+    <a href="v2.html" class="active">v2</a>
+    <a href="v3.html">v3</a>
+    <a href="v4.html">v4</a>
+    <a href="v5.html">v5</a>
+  </nav>
+
+  <!-- faint host page behind the popover -->
+  <div class="host">
+    <h1>Help center project brainstorm</h1>
+    <div class="host-table">
+      <div class="host-row head"><span>Name</span><span># Reach</span><span># Impact</span><span># Confidence</span><span># Effort</span></div>
+      <div class="host-row"><span>Create a new home page</span><span>2</span><span>2</span><span>3</span><span>2</span></div>
+      <div class="host-row"><span>Audit the entire help center</span><span>3</span><span>2</span><span>2</span><span>1</span></div>
+      <div class="host-row"><span>Create 3 new videos</span><span>1</span><span>3</span><span>2</span><span>3</span></div>
+    </div>
+    <button id="open-popover" class="primary-btn open-btn">Edit formula</button>
+  </div>
+
+  <!-- popover -->
+  <div class="popover" id="popover">
+    <header class="pop-header">
+      <div class="pop-title-row">
+        <div class="pop-title">
+          Expression Builder
+          <a class="pop-doc" href="#" target="_blank" rel="noopener noreferrer" title="Open documentation in new tab">
+            Docs
+            <svg class="pop-doc-icon" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M9 2h5v5" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M14 2 7 9" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+              <path d="M12 9.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3.5" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+        <div class="pop-actions">
+          <button id="test-btn" class="primary-btn small test-btn" title="Open test panel">
+            <svg class="test-icon" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M5 3l8 5-8 5V3z" fill="currentColor"/>
+            </svg>
+            <span>Test</span>
+          </button>
+          <button id="close-test" class="primary-btn small test-close" title="Close test" hidden>
+            <svg class="test-icon" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+            </svg>
+            <span>Close test</span>
+          </button>
+        </div>
+      </div>
+      <div class="formula-wrap">
+        <div id="formula" class="formula" tabindex="0">
+          <span class="placeholder">Hover an item on the left to preview · click to add it here</span>
+        </div>
+        <button id="clear-btn" class="formula-clear" hidden>Clear</button>
+      </div>
+    </header>
+
+    <!-- Builder view: list + detail -->
+    <div class="pop-body view-builder" id="view-builder">
+      <aside class="list-pane">
+        <div class="list-search">
+          <input id="search-input" type="text" placeholder="Search…" autocomplete="off" />
+        </div>
+        <div class="list-tabs" id="list-tabs">
+          <button class="list-tab active" data-tab="All">All</button>
+          <button class="list-tab" data-tab="Functions">Functions</button>
+          <button class="list-tab" data-tab="Operators">Operators</button>
+        </div>
+        <div class="list-body" id="list-body"></div>
+      </aside>
+      <section class="detail-pane" id="detail-pane">
+        <div class="detail-empty">Select an item on the left to see details and examples.</div>
+      </section>
+    </div>
+
+    <!-- Test view: refs left, result right (overlays the builder body when active) -->
+    <div class="pop-body view-test" id="view-test" hidden>
+      <div class="test-refs">
+        <h4>Reference values</h4>
+        <div id="refs-list"></div>
+      </div>
+      <div class="test-result">
+        <div class="block-header">
+          <button id="run-btn" class="primary-btn small">Run</button>
+        </div>
+        <pre id="result-output" class="is-placeholder">Click <strong>Run</strong> to evaluate your expression against the reference values on the left.</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reference picker -->
+  <div id="ref-picker" class="ref-picker" hidden>
+    <div class="rp-header">
+      <button id="rp-back" class="rp-back" hidden>‹</button>
+      <span id="rp-breadcrumb" class="rp-breadcrumb">References</span>
+    </div>
+    <div class="rp-search">
+      <input id="rp-search" type="text" placeholder="Search attributes…" autocomplete="off" />
+    </div>
+    <div id="rp-list" class="rp-list"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
