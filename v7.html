@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Expression Builder · v4</title>
+  <title>Expression Builder · v7</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body data-version="v7">
   <nav class="version-switch">
     <span class="version-label">Version</span>
     <a href="index.html">v1</a>
     <a href="v2.html">v2</a>
     <a href="v3.html">v3</a>
-    <a href="v4.html" class="active">v4</a>
+    <a href="v4.html">v4</a>
     <a href="v5.html">v5</a>
     <a href="v6.html">v6</a>
-    <a href="v7.html">v7</a>
+    <a href="v7.html" class="active">v7</a>
     <a href="v8.html">v8</a>
   </nav>
 
@@ -30,7 +30,8 @@
     <button id="open-popover" class="primary-btn open-btn">Edit formula</button>
   </div>
 
-  <div class="popover layout-wide" id="popover">
+  <!-- v7: wide centered modal. List + rich library card + scenario table. -->
+  <div class="popover layout-wide layout-learn" id="popover">
     <header class="pop-header">
       <div class="pop-title-row">
         <div class="pop-title">
@@ -47,17 +48,16 @@
       </div>
       <div class="formula-wrap">
         <div id="formula" class="formula" tabindex="0">
-          <span class="placeholder">Hover an item on the left to preview · click to add it here</span>
+          <span class="placeholder">Browse the library on the left · click to add it here</span>
         </div>
         <button id="clear-btn" class="formula-clear" hidden>Clear</button>
       </div>
     </header>
 
-    <!-- Builder + test panel always visible side-by-side -->
-    <div class="pop-body view-builder builder-with-test" id="view-builder">
+    <div class="pop-body view-builder builder-learn" id="view-builder">
       <aside class="list-pane">
         <div class="list-search">
-          <input id="search-input" type="text" placeholder="Search…" autocomplete="off" />
+          <input id="search-input" type="text" placeholder="Search the library…" autocomplete="off" />
         </div>
         <div class="list-tabs" id="list-tabs">
           <button class="list-tab active" data-tab="All">All</button>
@@ -66,21 +66,20 @@
         </div>
         <div class="list-body" id="list-body"></div>
       </aside>
+
+      <!-- The "library card": description, signature, and runnable examples -->
       <section class="detail-pane" id="detail-pane">
-        <div class="detail-empty">Select an item on the left to see details and examples.</div>
+        <div class="detail-empty">Select an item on the left to learn what it does — then press <strong>Try&nbsp;▸</strong> on an example to see it run.</div>
       </section>
-      <section class="test-panel" id="test-panel">
-        <button class="panel-toggle test-panel-toggle" id="test-panel-toggle" title="Collapse test panel">›</button>
-        <div class="test-panel-inner">
-          <div class="block-header">
-            <h4>Test</h4>
-            <button id="run-btn" class="primary-btn small">Run</button>
-          </div>
-          <h5 class="test-subheading">Reference values</h5>
-          <div id="refs-list"></div>
-          <h5 class="test-subheading">Result</h5>
-          <pre id="result-output" class="is-placeholder">Edit values above and click <strong>Run</strong>, or build to see the result here.</pre>
+
+      <!-- Scenario panel: test the whole formula across many cases at once -->
+      <section class="scenario-panel" id="scenario-panel">
+        <div class="scenario-head">
+          <div class="scenario-title">Results across scenarios</div>
+          <button id="add-scenario" class="ghost-btn small">+ Add case</button>
         </div>
+        <div class="scenario-sub">Columns are built automatically from the properties &amp; references your formula uses.</div>
+        <div id="scenario-table" class="scenario-table"></div>
       </section>
     </div>
   </div>

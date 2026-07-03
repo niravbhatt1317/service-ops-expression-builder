@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expression Builder · v8</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-version="v8">
+  <nav class="version-switch">
+    <span class="version-label">Version</span>
+    <a href="index.html">v1</a>
+    <a href="v2.html">v2</a>
+    <a href="v3.html">v3</a>
+    <a href="v4.html">v4</a>
+    <a href="v5.html">v5</a>
+    <a href="v6.html">v6</a>
+    <a href="v7.html">v7</a>
+    <a href="v8.html" class="active">v8</a>
+  </nav>
+
+  <div class="host">
+    <h1>Help center project brainstorm</h1>
+    <div class="host-table">
+      <div class="host-row head"><span>Name</span><span># Reach</span><span># Impact</span><span># Confidence</span><span># Effort</span></div>
+      <div class="host-row"><span>Create a new home page</span><span>2</span><span>2</span><span>3</span><span>2</span></div>
+      <div class="host-row"><span>Audit the entire help center</span><span>3</span><span>2</span><span>2</span><span>1</span></div>
+      <div class="host-row"><span>Create 3 new videos</span><span>1</span><span>3</span><span>2</span><span>3</span></div>
+    </div>
+    <div class="expr-field">
+      <div class="ef-type">
+        <select id="ef-type-select" class="ef-type-select" aria-label="Value type">
+          <option value="reference">Reference</option>
+          <option value="expression">Expression</option>
+          <option value="constant">Constant</option>
+        </select>
+      </div>
+      <button type="button" id="open-popover" class="ef-open" title="Open the expression builder">
+        <span id="ef-value" class="ef-value is-empty">Open the expression builder</span>
+        <svg class="ef-icon" viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="4" width="15" height="12" rx="2"/>
+          <line x1="12" y1="4" x2="12" y2="16"/>
+          <path d="M5.5 8l2 2-2 2"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- v8: wide right drawer. Top bar (heading + close) · two full-height columns
+       (builder left, live test console right) · footer actions. -->
+  <div class="popover drawer drawer-side" id="popover" hidden>
+    <div class="drawer-resize" id="drawer-resize" title="Drag to resize the drawer"></div>
+
+    <div class="drawer-topbar">
+      <div class="dt-left">
+        <h2 class="dt-title">Expression Builder</h2>
+        <a class="pop-doc" href="#" target="_blank" rel="noopener noreferrer" title="Open documentation in new tab">
+          Docs
+          <svg class="pop-doc-icon" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M9 2h5v5" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 2 7 9" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+            <path d="M12 9.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3.5" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+      <div class="dt-right">
+        <button id="test-mode-toggle" class="test-toggle" aria-label="Toggle test mode">
+          <span class="tm-switch"><span class="tm-knob"></span></span>
+          <span class="tm-text">Test mode</span>
+          <span class="tm-state">On</span>
+        </button>
+        <button class="dt-close" id="close-popover" title="Close" aria-label="Close">
+          <svg viewBox="0 0 16 16" aria-hidden="true" width="15" height="15">
+            <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="drawer-cols">
+      <div class="builder-main">
+        <div class="formula-header">
+          <div class="formula-wrap">
+            <div id="formula" class="formula" tabindex="0">
+              <span class="placeholder">Hover an item on the left to preview · click to add it here</span>
+            </div>
+            <div class="formula-toolbar">
+              <div class="ft-left">
+                <button type="button" id="add-ref-btn" class="ft-btn ft-addref"><span class="ft-at">@</span> Add reference</button>
+                <span class="ft-sep"></span>
+                <button type="button" id="undo-btn" class="icon-btn ft-icon" title="Undo" disabled>
+                  <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M6 4L3 7l3 3M3 7h6a4 4 0 0 1 0 8H7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button type="button" id="redo-btn" class="icon-btn ft-icon" title="Redo" disabled>
+                  <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M10 4l3 3-3 3M13 7H7a4 4 0 0 0 0 8h2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+              <div class="ft-right">
+                <button id="clear-btn" class="ft-btn ft-clear" hidden>Clear</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pop-body view-builder builder-two-col" id="view-builder">
+          <aside class="list-pane">
+            <div class="list-search">
+              <input id="search-input" type="text" placeholder="Search…" autocomplete="off" />
+            </div>
+            <div class="list-tabs" id="list-tabs">
+              <button class="list-tab active" data-tab="All">All</button>
+              <button class="list-tab" data-tab="Functions">Functions</button>
+              <button class="list-tab" data-tab="Operators">Operators</button>
+            </div>
+            <div class="list-body" id="list-body"></div>
+          </aside>
+          <section class="detail-pane" id="detail-pane">
+            <div class="detail-empty">Select an item on the left to see details and examples.</div>
+          </section>
+        </div>
+      </div>
+
+      <div class="col-resize" id="col-resize" title="Drag to resize the test panel"></div>
+
+      <!-- Test console: result at the top, sample values in the middle, Run test at the bottom -->
+      <section class="console-side" id="live-console">
+        <div class="cs-section cs-outputtype">
+          <div class="ot-field">
+            <label for="output-type">Output Type <span class="req">*</span></label>
+            <select id="output-type" class="output-type-select">
+              <option value="any">Any</option>
+              <option value="string" selected>String</option>
+              <option value="number">Number</option>
+              <option value="boolean">Boolean</option>
+              <option value="date">Date</option>
+            </select>
+          </div>
+          <div id="output-type-hint" class="output-hint"></div>
+        </div>
+
+        <div class="cs-section cs-result">
+          <div class="lc-label">Result <span id="result-type" class="type-chip" hidden></span></div>
+          <pre id="result-output" class="lc-result is-placeholder">Build something on the left to see the result here.</pre>
+          <div id="result-check" class="result-check" hidden></div>
+        </div>
+
+        <div class="cs-section cs-samples">
+          <div class="lc-label">Sample values <span class="lc-sub">used in this formula</span></div>
+          <div id="sample-values" class="sample-values"></div>
+        </div>
+
+        <div class="cs-run">
+          <button id="run-test" class="run-test-btn">Run test</button>
+        </div>
+      </section>
+    </div>
+
+    <footer class="drawer-footer">
+      <button id="reset-btn" class="ghost-btn">Reset</button>
+      <div class="df-right">
+        <button id="cancel-btn" class="ghost-btn">Cancel</button>
+        <button id="save-btn" class="primary-btn">Save</button>
+      </div>
+    </footer>
+  </div>
+
+  <div id="ref-picker" class="ref-picker" hidden>
+    <div class="rp-header">
+      <button id="rp-back" class="rp-back" hidden>‹</button>
+      <span id="rp-breadcrumb" class="rp-breadcrumb">References</span>
+    </div>
+    <div class="rp-search">
+      <input id="rp-search" type="text" placeholder="Search attributes…" autocomplete="off" />
+    </div>
+    <div id="rp-list" class="rp-list"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

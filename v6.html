@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Expression Builder · v4</title>
+  <title>Expression Builder · v6</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body data-version="v6">
   <nav class="version-switch">
     <span class="version-label">Version</span>
     <a href="index.html">v1</a>
     <a href="v2.html">v2</a>
     <a href="v3.html">v3</a>
-    <a href="v4.html" class="active">v4</a>
+    <a href="v4.html">v4</a>
     <a href="v5.html">v5</a>
-    <a href="v6.html">v6</a>
+    <a href="v6.html" class="active">v6</a>
     <a href="v7.html">v7</a>
     <a href="v8.html">v8</a>
   </nav>
@@ -30,7 +30,8 @@
     <button id="open-popover" class="primary-btn open-btn">Edit formula</button>
   </div>
 
-  <div class="popover layout-wide" id="popover">
+  <!-- v6: full-height right drawer. Same #popover id so shared handlers work; .drawer overrides layout. -->
+  <div class="popover drawer" id="popover">
     <header class="pop-header">
       <div class="pop-title-row">
         <div class="pop-title">
@@ -51,10 +52,13 @@
         </div>
         <button id="clear-btn" class="formula-clear" hidden>Clear</button>
       </div>
+      <!-- Contextual, IDE-style parameter hint for the focused argument -->
+      <div id="param-hint" class="param-hint idle">
+        <span class="ph-idle">Click a function’s argument slot to see what it expects.</span>
+      </div>
     </header>
 
-    <!-- Builder + test panel always visible side-by-side -->
-    <div class="pop-body view-builder builder-with-test" id="view-builder">
+    <div class="pop-body view-builder builder-console" id="view-builder">
       <aside class="list-pane">
         <div class="list-search">
           <input id="search-input" type="text" placeholder="Search…" autocomplete="off" />
@@ -69,17 +73,23 @@
       <section class="detail-pane" id="detail-pane">
         <div class="detail-empty">Select an item on the left to see details and examples.</div>
       </section>
-      <section class="test-panel" id="test-panel">
-        <button class="panel-toggle test-panel-toggle" id="test-panel-toggle" title="Collapse test panel">›</button>
-        <div class="test-panel-inner">
-          <div class="block-header">
-            <h4>Test</h4>
-            <button id="run-btn" class="primary-btn small">Run</button>
+
+      <!-- Live console: always-on explanation, auto-derived test inputs, live result -->
+      <section class="live-console" id="live-console">
+        <div class="lc-block lc-reads">
+          <div class="lc-label">Reads as</div>
+          <div id="reads-as" class="reads-as">
+            <span class="ra-empty">Your formula will be described here in plain English as you build it.</span>
           </div>
-          <h5 class="test-subheading">Reference values</h5>
-          <div id="refs-list"></div>
-          <h5 class="test-subheading">Result</h5>
-          <pre id="result-output" class="is-placeholder">Edit values above and click <strong>Run</strong>, or build to see the result here.</pre>
+        </div>
+        <div class="lc-block lc-samples">
+          <div class="lc-label">Sample values <span class="lc-sub">used in this formula</span></div>
+          <div id="sample-values" class="sample-values"></div>
+        </div>
+        <div class="lc-block lc-result">
+          <div class="lc-label">Result <span id="result-type" class="type-chip" hidden></span></div>
+          <pre id="result-output" class="lc-result is-placeholder">Build something on the left to see the live result here.</pre>
+          <button id="run-btn" class="primary-btn small" hidden>Run</button>
         </div>
       </section>
     </div>
